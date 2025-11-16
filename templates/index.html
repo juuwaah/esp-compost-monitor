@@ -205,6 +205,47 @@
             color: #6c757d;
             font-size: 0.9rem;
         }
+        .data-table-container {
+            margin-top: 30px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #dee2e6;
+        }
+        .data-table-container h3 {
+            color: #003d7a;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        .temperature-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .temperature-table th,
+        .temperature-table td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .temperature-table th {
+            background: #f8f9fa;
+            color: #495057;
+            font-weight: 600;
+            border-top: 1px solid #dee2e6;
+        }
+        .temperature-table tr:hover {
+            background: #f8f9fa;
+        }
+        .temp-cell {
+            font-weight: 600;
+            color: #2e7d32;
+        }
+        .time-cell {
+            color: #6c757d;
+            font-size: 0.85rem;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -232,7 +273,7 @@
         <div class="project-header">
             <div class="course-code">IE-0303</div>
             <h2>🌱 Proyecto Final: Compostera Giratorio con Motor</h2>
-            <div class="authors">Por: Bakuho Goto, Alina Núñez</div>
+            <div class="authors">Por: Alina Núñez, Bakuho Goto </div>
         </div>
         
         <div id="status" class="status offline">
@@ -253,9 +294,28 @@
             <canvas id="temperatureChart"></canvas>
         </div>
 
+        <div class="data-table-container">
+            <h3>📋 Últimas 10 Lecturas de Temperatura</h3>
+            <table class="temperature-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Temperatura</th>
+                        <th>Fecha y Hora</th>
+                    </tr>
+                </thead>
+                <tbody id="temperature-table-body">
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: #6c757d; font-style: italic;">
+                            Cargando datos...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
         <div class="ucr-footer">
-            <p><strong>Desarrollado por Bakuho Goto</strong></p>
-            <p>IE-0303: Electrotecnia | Universidad de Costa Rica | 2025</p>
+            <p><strong>Bakuho Goto. 2025.</strong></p>
         </div>
     </div>
 
@@ -348,6 +408,7 @@
                 
                 if (result.success && result.data.length > 0) {
                     updateChart(result.data);
+                    updateTable(result.data);
                     document.getElementById('data-count').textContent = `Total de datos: ${result.total_count}`;
                 }
             } catch (error) {
@@ -396,6 +457,38 @@
             chart.data.labels = labels;
             chart.data.datasets[0].data = temperatures;
             chart.update();
+        }
+
+        // テーブルを更新 (最新10件)
+        function updateTable(data) {
+            const tableBody = document.getElementById('temperature-table-body');
+            
+            // 最新10件を取得
+            const latest10 = data.slice(-10).reverse();
+            
+            if (latest10.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: #6c757d; font-style: italic;">
+                            Sin datos disponibles
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = latest10.map((item, index) => {
+                const date = new Date(item.received_at);
+                const formattedDate = date.toLocaleString('es-ES');
+                
+                return `
+                    <tr>
+                        <td>${latest10.length - index}</td>
+                        <td class="temp-cell">${item.temperature.toFixed(1)}°C</td>
+                        <td class="time-cell">${formattedDate}</td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         // データの鮮度をチェック
