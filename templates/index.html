@@ -45,6 +45,7 @@
         }
         .nav-tabs li {
             margin-right: 1px;
+            position: relative;
         }
         .nav-tabs a {
             display: block;
@@ -68,6 +69,39 @@
             font-weight: 600;
             position: relative;
             z-index: 1;
+        }
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #dee2e6;
+            border-radius: 0 0 8px 8px;
+            z-index: 1000;
+        }
+        .dropdown-menu a {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 0;
+            display: block;
+            color: #495057;
+            background: white;
+        }
+        .dropdown-menu a:hover {
+            background: #f8f9fa;
+            color: #003d7a;
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        .dropdown-toggle {
+            cursor: pointer;
         }
         .container {
             max-width: 1200px;
@@ -183,9 +217,14 @@
     <nav class="nav-tabs">
         <ul>
             <li><a href="#" class="active">IE-0303 Proyecto Final</a></li>
-            <li><a href="#">Otros Proyectos</a></li>
-            <li><a href="#">Documentación</a></li>
-            <li><a href="#">Acerca de</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">Otros Proyectos ▼</a>
+                <div class="dropdown-menu">
+                    <a href="https://japanese-b.com" target="_blank">Japanese B</a>
+                    <a href="https://web-production-c4c86.up.railway.app" target="_blank">Proyecto C4C86</a>
+                    <a href="https://web-production-d260e.up.railway.app/" target="_blank">Proyecto D260E</a>
+                </div>
+            </li>
         </ul>
     </nav>
 
@@ -215,8 +254,8 @@
         </div>
 
         <div class="ucr-footer">
-            <p><strong>Universidad de Costa Rica - Ingeniería Eléctrica</strong></p>
-            <p>IE-0303: Electrotecnia | 2025 | Campus Rodrigo Facio</p>
+            <p><strong>Desarrollado por Bakuho Goto</strong></p>
+            <p>IE-0303: Electrotecnia | Universidad de Costa Rica | 2025</p>
         </div>
     </div>
 
